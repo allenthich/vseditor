@@ -23,7 +23,6 @@ export const App = () => (
                       "body"`}
       gridTemplateRows={'3rem calc(100vh - 3rem)'}
       gridTemplateColumns={'1fr'}
-      gap='1'
       color='blackAlpha.700'
       fontWeight='bold'
     >
