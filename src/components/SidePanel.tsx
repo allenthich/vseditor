@@ -14,6 +14,9 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -25,6 +28,7 @@ import {
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
+import { SearchIcon } from '@chakra-ui/icons'
 
 interface LinkItemProps {
   name: string
@@ -77,10 +81,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
-        </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        <InputGroup size='sm'>
+            <InputRightElement pointerEvents='none'>
+                <SearchIcon color='gray.300' />
+            </InputRightElement>
+            <Input type='text' placeholder='Search component' />
+        </InputGroup>
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon}>
