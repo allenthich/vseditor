@@ -29,6 +29,7 @@ import {
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
+import DragItem from './sidePanel/DragItem'
 
 interface LinkItemProps {
   name: string
@@ -74,25 +75,28 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.900')}
-      borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
-      h="full"
-      {...rest}>
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <InputGroup size='sm'>
-            <InputRightElement pointerEvents='none'>
-                <SearchIcon color='gray.300' />
-            </InputRightElement>
-            <Input type='text' placeholder='Search component' />
-        </InputGroup>
-      </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+        maxH="calc(100vh - 3rem)"
+        overflowY="auto"
+        m={0}
+        p={0}
+        as="menu"
+        bg={useColorModeValue('white', 'gray.900')}
+        borderRight="1px"
+        borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+        w={{ base: 'full', md: 60 }}
+        h="full"
+        {...rest}>
+            <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
+                <InputGroup size='sm'>
+                    <InputRightElement pointerEvents='none'>
+                        <SearchIcon color='gray.300' />
+                    </InputRightElement>
+                    <Input type='text' placeholder='Search component' />
+                </InputGroup>
+            </Box>
+        {LinkItems.map((link) => (
+          <DragItem label={link.name}></DragItem>
+        ))}
     </Box>
   )
 }
