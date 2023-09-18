@@ -17,6 +17,8 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Button,
+  Stack,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -28,7 +30,7 @@ import {
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
-import { SearchIcon } from '@chakra-ui/icons'
+import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import DragItem from './sidePanel/DragItem'
 
 interface LinkItemProps {
@@ -43,36 +45,25 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings },
 ]
 
-export default function SimpleSidebar() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  return (
-    <Box bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full">
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      {/* <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} /> */}
-      {/* <Box ml={{ base: 0, md: 60 }} p="4">
-        Content
-      </Box> */}
-    </Box>
-  )
+const SideBarActions = () => {
+    return (
+        <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
+            <Stack direction='column' spacing={4}>
+                <InputGroup size='sm'>
+                    <InputRightElement pointerEvents='none'>
+                        <SearchIcon color='gray.300' />
+                    </InputRightElement>
+                    <Input type='text' placeholder='Search component' />
+                </InputGroup>
+                <Button leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
+                    Create Template
+                </Button>
+            </Stack>
+        </Box>
+    )
 }
 
-interface SidebarProps extends BoxProps {
-  onClose: () => void
-}
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ ...rest }: BoxProps) => {
   return (
     <Box
         maxH="calc(100vh - 3rem)"
@@ -86,85 +77,18 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         w={{ base: 'full', md: 60 }}
         h="full"
         {...rest}>
-            <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
-                <InputGroup size='sm'>
-                    <InputRightElement pointerEvents='none'>
-                        <SearchIcon color='gray.300' />
-                    </InputRightElement>
-                    <Input type='text' placeholder='Search component' />
-                </InputGroup>
-            </Box>
+        <SideBarActions />
         {LinkItems.map((link) => (
-          <DragItem label={link.name}></DragItem>
+            <DragItem label={link.name} />
         ))}
     </Box>
   )
 }
 
-interface NavItemProps extends FlexProps {
-  icon: IconType
-  children: ReactText
+export default function SimpleSidebar() {
+    return (
+      <Box bg={useColorModeValue('gray.100', 'gray.900')}>
+          <SidebarContent />
+      </Box>
+    )
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-  return (
-    <Box
-      as="a"
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}>
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Box>
-  )
-}
-
-// interface MobileProps extends FlexProps {
-//   onOpen: () => void
-// }
-// const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-//   return (
-//     <Flex
-//       ml={{ base: 0, md: 60 }}
-//       px={{ base: 4, md: 24 }}
-//       height="20"
-//       alignItems="center"
-//       bg={useColorModeValue('white', 'gray.900')}
-//       borderBottomWidth="1px"
-//       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-//       justifyContent="flex-start"
-//       {...rest}>
-//       <IconButton
-//         variant="outline"
-//         onClick={onOpen}
-//         aria-label="open menu"
-//         icon={<FiMenu />}
-//       />
-
-//       <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-//         Logo
-//       </Text>
-//     </Flex>
-//   )
-// }

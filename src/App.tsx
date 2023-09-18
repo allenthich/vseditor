@@ -11,12 +11,14 @@ import {
   Grid,
   GridItem,
   theme,
+  Stack,
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./features/ColorModeSwitcher"
 import { Logo } from "./features/Logo"
 import Header from "./components/Header"
 import Inspector from "./components/Inspector"
 import SidePanel from "./components/SidePanel"
+import CodePanel from "./components/CodePanel"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -44,7 +46,9 @@ export const App = () => (
             <SidePanel />
           </GridItem>
           <GridItem pl='2' bg='green.300' area={'main'}>
-            Main
+            <Stack direction='column'>
+              <CodePanel />
+            </Stack>
           </GridItem>
           <GridItem pl='2' bg='purple.300' area={'rPanel'}>
           <Inspector />
