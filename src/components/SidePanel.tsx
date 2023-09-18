@@ -79,7 +79,7 @@ const SidebarContent = ({ ...rest }: BoxProps) => {
         {...rest}>
         <SideBarActions />
         {LinkItems.map((link) => (
-            <DragItem label={link.name} />
+            <DragItem label={link.name} key={link.name} />
         ))}
     </Box>
   )

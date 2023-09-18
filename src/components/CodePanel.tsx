@@ -12,7 +12,7 @@ const EXAMPLE_CUSTOM_CODE = `
 const CodePanel = () => {
     return (
         <Box bgColor='white'>
-            <Text contentEditable='true' whiteSpace='pre-wrap'>
+            <Text contentEditable='true' whiteSpace='pre-wrap' suppressContentEditableWarning={true}>
                 <Highlight query='type' styles={{ px: '1', py: '1', bg: 'orange.100' }}>
                     {EXAMPLE_CUSTOM_CODE}
                 </Highlight>

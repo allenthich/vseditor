@@ -2,6 +2,8 @@ import { ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
 import * as ReactDOM from "react-dom/client"
 import { App } from "./App"
+import { Provider } from 'react-redux'
+import store from './app/store'
 import reportWebVitals from "./app/reportWebVitals"
 import * as serviceWorker from "./app/serviceWorker"
 
@@ -12,8 +14,9 @@ const root = ReactDOM.createRoot(container)
 
 root.render(
   <React.StrictMode>
-    <ColorModeScript />
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
 )
 
