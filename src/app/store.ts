@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import codeTemplateReducer from '../features/CodeTemplateSlice'
 import sidePanelReducer from '../features/SidePanelSlice'
 
 const store = configureStore({
   reducer: {
-    codeTemplate: codeTemplateReducer,
     sidePanel: sidePanelReducer
   },
 })

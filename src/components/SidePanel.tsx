@@ -33,6 +33,14 @@ import { ReactText } from 'react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import DragItem from './sidePanel/DragItem'
 
+import { createTemplate } from '../app/actions'
+import { connect, ConnectedProps } from 'react-redux'
+// import { CodeTemplateState } from '../features/CodeTemplateSlice'
+// import { TString } from '../features/CodeTemplateSlice'
+
+const connector = connect(null, { createTemplate })
+type PropsFromRedux = ConnectedProps<typeof connector>
+
 interface LinkItemProps {
   name: string
   icon: IconType
@@ -45,7 +53,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings },
 ]
 
-const SideBarActions = () => {
+const SidePanelActions = ({ createTemplate }: PropsFromRedux) => {
     return (
         <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
             <Stack direction='column' spacing={4}>
@@ -55,7 +63,7 @@ const SideBarActions = () => {
                     </InputRightElement>
                     <Input type='text' placeholder='Search component' />
                 </InputGroup>
-                <Button leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
+                <Button onClick={() => createTemplate({label: 'WOO', codeLiteral: `` })} leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
                     Create Template
                 </Button>
             </Stack>
@@ -63,32 +71,26 @@ const SideBarActions = () => {
     )
 }
 
-const SidebarContent = ({ ...rest }: BoxProps) => {
-  return (
-    <Box
-        maxH="calc(100vh - 3rem)"
-        overflowY="auto"
-        m={0}
-        p={0}
-        as="menu"
-        bg={useColorModeValue('white', 'gray.900')}
-        borderRight="1px"
-        borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-        w={{ base: 'full', md: 60 }}
-        h="full"
-        {...rest}>
-        <SideBarActions />
-        {LinkItems.map((link) => (
-            <DragItem label={link.name} key={link.name} />
-        ))}
-    </Box>
-  )
-}
-
-export default function SimpleSidebar() {
+const SidePanel = ({...props}: PropsFromRedux) => {
     return (
-      <Box bg={useColorModeValue('gray.100', 'gray.900')}>
-          <SidebarContent />
-      </Box>
+        <Box
+            maxH="calc(100vh - 3rem)"
+            overflowY="auto"
+            m={0}
+            p={0}
+            as="menu"
+            bg={useColorModeValue('white', 'gray.900')}
+            borderRight="1px"
+            borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+            w={{ base: 'full', md: 60 }}
+            h="full"
+            {...props}>
+            <SidePanelActions {...props}/>
+            {LinkItems.map((link) => (
+                <DragItem label={link.name} key={link.name} />
+            ))}
+        </Box>
     )
 }
+
+export default connector(SidePanel)
