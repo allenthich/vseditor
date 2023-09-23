@@ -1,22 +1,17 @@
 import { ADD_TEMPLATE, REMOVE_TEMPLATE, RENAME_TEMPLATE } from "./actionTypes";
-import { CodeTemplateState } from '../features/CodeTemplateSlice'
+import { CodeTemplate } from '../app/types'
 
-let nextTemplateId = 0;
-
-export const createTemplate = (content: CodeTemplateState) => ({
+export const createTemplate = (content: CodeTemplate) => ({
   type: ADD_TEMPLATE,
-  payload: {
-    id: ++nextTemplateId,
-    content
-  }
+  payload: content
 });
 
-export const removeTemplate = (id: Number) => ({
+export const removeTemplate = (id: number) => ({
   type: REMOVE_TEMPLATE,
   payload: { id }
 });
 
-export const renameTemplate = (id: Number, label: String) => ({
+export const renameTemplate = (id: number, label: string) => ({
   type: RENAME_TEMPLATE,
   payload: { 
     id,

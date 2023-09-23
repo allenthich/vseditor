@@ -33,27 +33,27 @@ import { ReactText } from 'react'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import DragItem from './sidePanel/DragItem'
 
+import type { RootState } from '../app/store'
 import { createTemplate } from '../app/actions'
 import { connect, ConnectedProps } from 'react-redux'
-// import { CodeTemplateState } from '../features/CodeTemplateSlice'
+import { CodeTemplate } from '../app/types'
+import { getTemplates } from '../app/selectors'
 // import { TString } from '../features/CodeTemplateSlice'
 
-const connector = connect(null, { createTemplate })
+const mapStateToProps = (state: RootState) => {
+    return { templates: getTemplates(state) };
+};
+
+// Action creators
+const mapDispatchToProps = {
+    createTemplate
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-interface LinkItemProps {
-  name: string
-  icon: IconType
-}
-const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
-]
-
-const SidePanelActions = ({ createTemplate }: PropsFromRedux) => {
+const SidePanelActions = (props: PropsFromRedux) => {
+    const { createTemplate } = props
     return (
         <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
             <Stack direction='column' spacing={4}>
@@ -63,7 +63,7 @@ const SidePanelActions = ({ createTemplate }: PropsFromRedux) => {
                     </InputRightElement>
                     <Input type='text' placeholder='Search component' />
                 </InputGroup>
-                <Button onClick={() => createTemplate({label: 'WOO', codeLiteral: `` })} leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
+                <Button onClick={() => createTemplate({id: crypto.randomUUID(), label: 'WOO', codeLiteral: `` })} leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
                     Create Template
                 </Button>
             </Stack>
@@ -83,11 +83,10 @@ const SidePanel = ({...props}: PropsFromRedux) => {
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
             w={{ base: 'full', md: 60 }}
-            h="full"
-            {...props}>
-            <SidePanelActions {...props}/>
-            {LinkItems.map((link) => (
-                <DragItem label={link.name} key={link.name} />
+            h="full">
+            <SidePanelActions {...props} />
+            {props.templates.map((template: CodeTemplate) => (
+                <DragItem label={template.label} key={template.id} />
             ))}
         </Box>
     )

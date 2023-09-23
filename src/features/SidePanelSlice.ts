@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../app/store'
-import { CodeTemplateState } from './CodeTemplateSlice'
+import { CodeTemplate } from '../app/types'
 
 
 // Define a type for the slice state
 interface SidePanelState {
-    templates: Array<CodeTemplateState>
+  templates: Array<CodeTemplate>
 }
 
 // TODO: Load existing templates as initial state fromlocalStorage potentially
+// Also include starting id count to prevent overwrites
 // Define the initial state using that type
 const initialState: SidePanelState = {
     templates: []
@@ -20,7 +21,8 @@ export const sidePanelSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    addTemplate: (state, action: PayloadAction<CodeTemplateState>) => {
+    addTemplate: (state, action: PayloadAction<CodeTemplate>) => {
+        
         // This "mutating" code is okay inside of createSlice!
         state.templates.push(action.payload)
     },
