@@ -26,6 +26,17 @@ export const sidePanelSlice = createSlice({
         // This "mutating" code is okay inside of createSlice!
         state.templates.push(action.payload)
     },
+    removeTemplate: (state, action: PayloadAction<CodeTemplate>) => {
+        
+        // This "mutating" code is okay inside of createSlice!
+        // state.templates.push(action.payload)
+    },
+    renameTemplate: (state, action: PayloadAction<CodeTemplate>) => {
+      const templateIndex = action.payload.templateIndex
+      if (templateIndex !== undefined) {
+        state.templates[templateIndex].label = action.payload.label
+      }
+    },
   },
 })
 

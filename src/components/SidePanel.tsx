@@ -34,7 +34,7 @@ import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import DragItem from './sidePanel/DragItem'
 
 import type { RootState } from '../app/store'
-import { createTemplate } from '../app/actions'
+import { createTemplate, renameTemplate } from '../app/actions'
 import { connect, ConnectedProps } from 'react-redux'
 import { CodeTemplate } from '../app/types'
 import { getTemplates } from '../app/selectors'
@@ -46,13 +46,14 @@ const mapStateToProps = (state: RootState) => {
 
 // Action creators
 const mapDispatchToProps = {
-    createTemplate
+    createTemplate,
+    renameTemplate
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
+export type SidePanelPropsFromRedux = ConnectedProps<typeof connector>
 
-const SidePanelActions = (props: PropsFromRedux) => {
+const SidePanelActions = (props: SidePanelPropsFromRedux) => {
     const { createTemplate } = props
     return (
         <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
@@ -71,7 +72,7 @@ const SidePanelActions = (props: PropsFromRedux) => {
     )
 }
 
-const SidePanel = ({...props}: PropsFromRedux) => {
+const SidePanel = ({...props}: SidePanelPropsFromRedux) => {
     return (
         <Box
             maxH="calc(100vh - 3rem)"
@@ -85,8 +86,8 @@ const SidePanel = ({...props}: PropsFromRedux) => {
             w={{ base: 'full', md: 60 }}
             h="full">
             <SidePanelActions {...props} />
-            {props.templates.map((template: CodeTemplate) => (
-                <DragItem label={template.label} key={template.id} />
+            {props.templates.map((template: CodeTemplate, templateIndex: number) => (
+                <DragItem label={template.label} key={template.id} index={templateIndex} {...props} />
             ))}
         </Box>
     )

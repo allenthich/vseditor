@@ -11,10 +11,10 @@ export const removeTemplate = (id: number) => ({
   payload: { id }
 });
 
-export const renameTemplate = (id: number, label: string) => ({
+export const renameTemplate = (templateIndex: number, label: string) => ({
   type: RENAME_TEMPLATE,
   payload: { 
-    id,
+    templateIndex,
     label
  }
 });
