@@ -41,7 +41,7 @@ import { getTemplates } from '../app/selectors'
 // import { TString } from '../features/CodeTemplateSlice'
 
 const mapStateToProps = (state: RootState) => {
-    return { templates: getTemplates(state) };
+    return { templates: getTemplates(state) }
 };
 
 // Action creators
@@ -51,10 +51,11 @@ const mapDispatchToProps = {
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
-export type SidePanelPropsFromRedux = ConnectedProps<typeof connector>
+type SidePanelPropsFromRedux = ConnectedProps<typeof connector>
 
 const SidePanelActions = (props: SidePanelPropsFromRedux) => {
     const { createTemplate } = props
+    const baseTemplate: CodeTemplate = {id: crypto.randomUUID(), label: 'WOO', codeLiteral: `` }
     return (
         <Box p={5} bgColor="#2e3748" position="sticky" w="100%" top={0}>
             <Stack direction='column' spacing={4}>
@@ -64,7 +65,7 @@ const SidePanelActions = (props: SidePanelPropsFromRedux) => {
                     </InputRightElement>
                     <Input type='text' placeholder='Search component' />
                 </InputGroup>
-                <Button onClick={() => createTemplate({id: crypto.randomUUID(), label: 'WOO', codeLiteral: `` })} leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
+                <Button onClick={() => createTemplate(baseTemplate)} leftIcon={<AddIcon />} size='sm' bg='gray.200' borderColor='gray.200' variant='solid'>
                     Create Template
                 </Button>
             </Stack>
@@ -87,7 +88,7 @@ const SidePanel = ({...props}: SidePanelPropsFromRedux) => {
             h="full">
             <SidePanelActions {...props} />
             {props.templates.map((template: CodeTemplate, templateIndex: number) => (
-                <DragItem label={template.label} key={template.id} index={templateIndex} {...props} />
+                <DragItem key={template.id} index={templateIndex} />
             ))}
         </Box>
     )

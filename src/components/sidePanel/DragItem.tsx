@@ -1,58 +1,59 @@
 import { useDrag } from 'react-dnd'
 import { Text, Box, Menu, MenuButton, IconButton, MenuList, MenuItem, Stack, Spacer, Editable, EditablePreview, EditableInput, Input, useEditableControls, ButtonGroup, Flex } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon, DragHandleIcon, EditIcon, HamburgerIcon, SettingsIcon, TriangleDownIcon } from '@chakra-ui/icons'
-import { SidePanelPropsFromRedux } from '../SidePanel'
-
-const DragItemActions = (props: DragItemProps) => {
-    const { label, index } = props
-    /* Here's a custom control */
-    const EditableControls = () => {
-      const {
-        getEditButtonProps,
-      } = useEditableControls()
-  
-      return (
-        <IconButton aria-label='Rename' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
-      )
-    }
-  
-    return (
-      <Editable
-        textAlign='center'
-        defaultValue={label}
-        isPreviewFocusable={false}
-        onSubmit={newLabel => props.renameTemplate(index, newLabel)}
-      >
-        <EditablePreview />
-        {/* Here is the custom input */}
-        <Input as={EditableInput} />
-        <EditableControls />
-      </Editable>
-    )
-}
-
+import { getTemplate } from '../../app/selectors'
+import { RootState } from '../../app/store'
+import { renameTemplate } from '../../app/actions'
+import { connect } from 'react-redux'
 
 const DragItemType = 'DRAGITEM_TYPE'
 
-type DragItemProps = SidePanelPropsFromRedux & {
-    label: string,
-    index: number
+const mapStateToProps = (state: RootState, ownProps: any) => {
+  return { template: getTemplate(state, ownProps.index) }
+};
+
+// Action creators
+const mapDispatchToProps = {
+  renameTemplate
 }
 
-const DragItem = (props : DragItemProps) => {
-    const {
-        label
-    } = props
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+const DragItem = (props: any) => {
+    const { index, template: { label } } = props
     const [, drag] = useDrag({
         item: { id: label },
         type: DragItemType
     })
     
-    let boxProps: any = {
+    const boxProps: any = {
         cursor: 'no-drop',
         color: 'blackAlpha.600',
         ref: drag
     }
+
+    const DragItemActions = () => {
+      /* Here's a custom control */
+      const EditableControls = () => {
+        const { getEditButtonProps, } = useEditableControls()
+        return <IconButton aria-label='Rename' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+      }
+    
+      return (
+        <Editable
+          textAlign='center'
+          defaultValue={label}
+          isPreviewFocusable={false}
+          onSubmit={newLabel => props.renameTemplate(index, newLabel)}
+        >
+          <EditablePreview />
+          {/* Here is the custom input */}
+          <Input as={EditableInput} />
+          <EditableControls />
+        </Editable>
+      )
+    }
+
     return (
         <Stack direction='row'>
             <Box
@@ -67,9 +68,9 @@ const DragItem = (props : DragItemProps) => {
                 {...boxProps}
                 >
                 <DragHandleIcon path="" fontSize="xs" mr={2} />
-                <DragItemActions {...props} />
+                <DragItemActions />
             </Box>
         </Stack>
     )
 }
-export default DragItem
+export default connector(DragItem)
